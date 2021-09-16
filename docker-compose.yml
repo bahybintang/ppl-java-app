@@ -1,0 +1,28 @@
+version: "3.7"
+services:
+  db:
+    image: mysql:5.7
+    ports:
+      - "32000:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/:ro
+    networks:
+      - ppl-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:4.9
+    depends_on:
+      - db
+    ports:
+      - 32001:80
+    environment:
+      - PMA_HOST=db
+      - PMA_ARBITRARY=1
+    networks:
+      - ppl-network
+
+networks:
+  ppl-network:
+    driver: bridge
